@@ -30,6 +30,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function Menu() {
 	const classes = useStyles();
+	let profile;
+	if (auth.loggedIn())
+		 profile = auth.getProfile();
+	console.log(profile);
 
 	const SignLinks = (
 		<div>
@@ -42,11 +46,6 @@ export default function Menu() {
 		</div>
 	);
 
-	const Profile = (
-		<div>
-			HILOOOO
-		</div>
-	);
 
 	return (
 			<div className={classes.root}>
@@ -59,7 +58,7 @@ export default function Menu() {
 							Booking
 						</Typography>
 						{
-							auth.loggedIn()? Profile : SignLinks
+							auth.loggedIn()? <div>{ profile.email }</div> : SignLinks
 						}
 					</Toolbar>
 				</AppBar>

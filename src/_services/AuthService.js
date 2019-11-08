@@ -1,30 +1,30 @@
 import Cookie from 'js-cookie';
 import decode from 'jwt-decode';
-
+import { apiUrl } from './config';
 
 export default class AuthService {
 	constructor(domain) {
-		this.domain = domain || 'http://localhost:3000'
+		this.domain = domain || apiUrl
 		this.fetch = this.fetch.bind(this)
 		this.login = this.login.bind(this)
 		this.getProfile = this.getProfile.bind(this)
 	}
 
 	register(email, password) {
-		return this.fetch(`${this.domain}/users/`, {
+		return this.fetch(`${this.domain}/auth/register`, {
 			method: 'POST',
 			body: JSON.stringify({
 				email,
 				password
 			})
 		}).then(res => {
-			this.setToken(res.token)
+			this.setToken(res.token);
 			return Promise.resolve(res);
 		})
 	}
 
 	login(email, password) {
-		return this.fetch(`${this.domain}/users/authenticate`, {
+		return this.fetch(`${this.domain}/auth/authenticate`, {
 			method: 'POST',
 			body: JSON.stringify({
 				email,
@@ -80,7 +80,7 @@ export default class AuthService {
 		};
 
 		if (this.loggedIn()) {
-			headers['Authorization'] = 'Bearer ' + this.getToken()
+			headers['Authorization'] = this.getToken()
 		}
 
 		return fetch(url, {
