@@ -8,28 +8,35 @@ import TableBody from "@material-ui/core/TableBody";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
+
 import Moment from 'react-moment';
+import Fab from "@material-ui/core/Fab";
 
 const bookingService = new BookingService();
 
 class Bookings extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log('hi');
 	}
 
 	state = {
-		bookings: [],
+		rents: [],
 		isFetching: true
 	}
 
 	componentDidMount() {
 		this.setState({isFetching: true})
-		bookingService.getBookings()
-			.then(bookings => {
-				console.log(bookings);
+		this.updateRents()
+	}
+
+	updateRents() {
+		bookingService.getRents()
+			.then(rents => {
+				console.log(rents);
 				this.setState({
-					bookings: bookings,
+					rents: rents,
 					isFetching: false
 				})
 			})
@@ -48,6 +55,18 @@ class Bookings extends React.Component {
 			return classes.declined;
 	}
 
+	changeStatus(status, rentId) {
+		console.log(rentId, status);
+		bookingService.updateStatus(rentId, status)
+			.then(res => {
+				console.log(res)
+				this.updateRents()
+			})
+			.catch(e => {
+				console.log(e)
+			})
+	}
+
 	render() {
 		const { classes } = this.props;
 
@@ -57,6 +76,7 @@ class Bookings extends React.Component {
 					<TableHead>
 						<TableRow>
 							<TableCell>Room</TableCell>
+							<TableCell align="right">User</TableCell>
 							<TableCell align="right">Address</TableCell>
 							<TableCell align="right">Arrive&nbsp;date</TableCell>
 							<TableCell align="right">City</TableCell>
@@ -64,14 +84,20 @@ class Bookings extends React.Component {
 							<TableCell align="right">Guests amount</TableCell>
 							<TableCell align="right">Price</TableCell>
 							<TableCell align="right">Status</TableCell>
+							<TableCell />
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{this.state.bookings.map((booking, index) => (
+						{this.state.rents.map((booking, index) => (
 							<TableRow key={booking.index}>
 								<TableCell component="th" scope="row">
-									<a href={`/rooms/${booking.room_id}`}>
-									{booking.room_id}
+									<a href={`/rooms/${booking.roomid}`}>
+										{booking.roomid}
+									</a>
+								</TableCell>
+								<TableCell align="right">
+									<a href={`/users/${booking.userid}`}>
+										{booking.useremail}
 									</a>
 								</TableCell>
 								<TableCell align="right" scope="row">
@@ -91,6 +117,22 @@ class Bookings extends React.Component {
 								<TableCell align="right">{booking.guestsamount}</TableCell>
 								<TableCell align="right">{booking.price}</TableCell>
 								<TableCell align="right" className={this.getClass(booking.status)}>{booking.status}</TableCell>
+								<TableCell align="right">
+									{ booking.status === 'approving'?
+										<React.Fragment>
+											<Fab color="primary" size="small"
+											     onClick={() => this.changeStatus('approved', booking.rentid)}
+											     aria-label="Approve" className={classes.fab}>
+												<CheckIcon/>
+											</Fab>
+											< Fab color="secondary" size="small"
+											onClick={() => this.changeStatus('declined', booking.rentid)}
+											aria-label="Decline" className={classes.fab}>
+											<ClearIcon />
+											</Fab>
+										</React.Fragment> : ''
+									}
+								</TableCell>
 							</TableRow>
 						))}
 					</TableBody>

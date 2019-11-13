@@ -33,7 +33,6 @@ export default function Menu() {
 	let profile;
 	if (auth.loggedIn())
 		 profile = auth.getProfile();
-	console.log(profile);
 
 	const SignLinks = (
 		<div>
