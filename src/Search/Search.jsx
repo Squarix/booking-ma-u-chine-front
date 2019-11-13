@@ -11,6 +11,8 @@ import Slider from '@material-ui/core/Slider';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
+import RoomCard from '../Room/components/RoomCard';
+
 const searchService = new SearchService();
 
 const AirbnbSlider = withStyles({
@@ -56,9 +58,9 @@ const AirbnbSlider = withStyles({
 function AirbnbThumbComponent(props) {
 	return (
 		<span {...props}>
-      <span className='bar' />
-      <span className='bar' />
-      <span className='bar' />
+      <span className='bar'/>
+      <span className='bar'/>
+      <span className='bar'/>
     </span>
 	);
 }
@@ -74,14 +76,17 @@ class Search extends React.Component {
 		priceMin: 0,
 		priceValues: [0, 1000],
 		guestsAmount: '',
-		roomsAmount: '',
+		size: '',
 		address: '',
-		description: ''
+		description: '',
+		page: 1,
+
+		rooms: []
 	}
 
 	handleInputChange = (e) => {
 		this.setState({
-			[e.target.name] : e.target.value
+			[e.target.name]: e.target.value
 		})
 	}
 
@@ -91,8 +96,29 @@ class Search extends React.Component {
 		})
 	}
 
+	handleSearch = () => {
+		const stateValues = {
+			description: this.state.description,
+			guestsAmount: this.state.guestsAmount,
+			size: this.state.size,
+			address: this.state.address
+		};
+
+		let params = {};
+		console.log(stateValues);
+		Object.keys(stateValues).map(key => {
+			const value = stateValues[key];
+			if (value)
+				params = Object.assign(params, {[key]: value})
+		});
+
+		console.log(params);
+		searchService
+			.doSearch(params)
+			.then(res => this.setState({rooms: res}));
+	}
+
 	componentDidMount() {
-		searchService.doSearch({description: 'qwerty'}).then(res => console.log(res))
 	}
 
 	render() {
@@ -101,12 +127,11 @@ class Search extends React.Component {
 		return (
 			<React.Fragment>
 				<Menu/>
-				<Container>
+				<Container className={classes.container}>
 					<Grid container>
 						<Grid item xs={3}>
-							<div className={classes.margin} />
 							<Typography variant={'h5'}>Search params</Typography>
-							<div className={classes.margin} />
+							<div className={classes.margin}/>
 							<TextField
 								id='outlined-error`'
 								label='Guests Amount'
@@ -121,7 +146,7 @@ class Search extends React.Component {
 							<TextField
 								id='outlined-error'
 								label='Rooms amount'
-								name='roomsAmount'
+								name='size'
 								placeholder='Rooms  '
 								value={this.state.roomsAmount}
 								onChange={this.handleInputChange}
@@ -151,7 +176,7 @@ class Search extends React.Component {
 								margin='normal'
 								variant='outlined'
 							/>
-							<div className={classes.margin} />
+							<div className={classes.margin}/>
 							<Typography gutterBottom>Price</Typography>
 							<AirbnbSlider
 								ThumbComponent={AirbnbThumbComponent}
@@ -163,13 +188,21 @@ class Search extends React.Component {
 								valueLabelDisplay='on'
 								className={classes.textField}
 							/>
-							<div className={classes.margin} />
-							<Button variant='outlined' color='primary' className={classes.button}>
+							<div className={classes.margin}/>
+							<Button variant='outlined' color='primary' className={classes.button} onClick={this.handleSearch}>
 								Search
 							</Button>
 						</Grid>
 						<Grid item xs={9}>
-							qwerty
+							<Grid container>
+								{
+									this.state.rooms.map(room =>
+										<Grid key={room._id} xs={6} item className={classes.resultItem}>
+											<RoomCard id={room._id} {...room._source}/>
+										</Grid>
+									)
+								}
+							</Grid>
 						</Grid>
 					</Grid>
 				</Container>

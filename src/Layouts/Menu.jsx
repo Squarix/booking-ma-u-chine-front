@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -8,6 +8,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from "@material-ui/core/Link";
 import AuthService from '../_services/AuthService';
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import ListItem from "@material-ui/core/ListItem";
+import List from "@material-ui/core/List";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
 
 
 const auth = new AuthService();
@@ -24,43 +30,109 @@ const useStyles = makeStyles(theme => ({
 	signButton: {
 		marginLeft: theme.spacing(2),
 		marginRight: '10px',
-	}
+	},
+	list: {
+		width: 250,
+	},
+	fullList: {
+		width: 'auto',
+	},
 }));
-
 
 export default function Menu() {
 	const classes = useStyles();
 	let profile;
 	if (auth.loggedIn())
-		 profile = auth.getProfile();
+		profile = auth.getProfile();
+
+	const [state, setState] = React.useState({
+		top: false,
+	});
+
+	const toggleDrawer = (side, open) => event => {
+		if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+			return;
+		}
+
+		setState({...state, [side]: open});
+	};
 
 	const SignLinks = (
 		<div>
 			<Link href={'/sign-in'} color='inherit' className={classes.signButton}>
-				<Button color="inherit" variant="outlined" >Sign In</Button>
+				<Button color="inherit" variant="outlined">Sign In</Button>
 			</Link>
-			<Link href={'/sign-up'} className={classes.signButton} >
-				<Button color="secondary" variant="outlined" >Sign Up</Button>
+			<Link href={'/sign-up'} className={classes.signButton}>
+				<Button color="secondary" variant="outlined">Sign Up</Button>
 			</Link>
+		</div>
+	);
+
+	const sideList = side => (
+		<div
+			className={classes.list}
+			role="presentation"
+			onClick={toggleDrawer(side, false)}
+			onKeyDown={toggleDrawer(side, false)}
+		>
+			<List>
+				<ListItem button>
+					<Link underline='none' color='inherit' href={'/search'}>
+						<ListItemText primary={'Search'} />
+					</Link>
+				</ListItem>
+				<ListItem button>
+					<Link underline='none' color='inherit' href={'/rooms'}>
+						<ListItemText primary={'Rooms'} />
+					</Link>
+				</ListItem>
+				<ListItem button>
+					<Link underline='none' color='inherit' href={'/profile'}>
+						<ListItemText primary={'Profile'} />
+					</Link>
+				</ListItem>
+			</List>
+			<Divider/>
+			<List>
+				<ListItem button>
+					<Link underline='none' color='inherit' href={'/sign-in'}>
+						<ListItemText primary={'Sign in'} />
+					</Link>
+				</ListItem>
+				<ListItem button>
+					<Link underline='none' color='inherit' href={'/sign-up'}>
+						<ListItemText primary={'Sign up'} />
+					</Link>
+				</ListItem>
+			</List>
 		</div>
 	);
 
 
 	return (
-			<div className={classes.root}>
-				<AppBar position="static">
-					<Toolbar>
-						<IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-							<MenuIcon />
-						</IconButton>
-						<Typography variant="h6" className={classes.title}>
-							Booking
-						</Typography>
-						{
-							auth.loggedIn()? <div>{ profile.email }</div> : SignLinks
-						}
-					</Toolbar>
-				</AppBar>
-			</div>
+		<div className={classes.root}>
+			<AppBar position="static">
+				<Toolbar>
+					<IconButton onClick={toggleDrawer('top', true)} edge="start" className={classes.menuButton} color="inherit"
+					            aria-label="menu">
+						<MenuIcon/>
+					</IconButton>
+					<Typography variant="h6" className={classes.title}>
+						Booking
+					</Typography>
+					{
+						auth.loggedIn() ? <div>{profile.email}</div> : SignLinks
+					}
+				</Toolbar>
+			</AppBar>
+			<SwipeableDrawer
+				anchor='left'
+				open={state.top}
+				onClose={toggleDrawer('top', false)}
+				onOpen={toggleDrawer('top', true)}
+			>
+				{sideList('right')}
+			</SwipeableDrawer>
+		</div>
 	);
 }

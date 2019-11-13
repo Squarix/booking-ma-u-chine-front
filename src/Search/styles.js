@@ -7,6 +7,14 @@ const styles = theme => ({
 		marginRight: theme.spacing(1),
 		width: 250,
 	},
+
+	container: {
+		marginTop: '50px'
+	},
+
+	resultItem: {
+		padding: '20px'
+	}
 });
 
 export default styles;
