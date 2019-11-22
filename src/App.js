@@ -7,6 +7,8 @@ import RoomRoutes from './Room/RoomRoutes';
 import { Switch, Route }from 'react-router-dom';
 import ProfileRoute from "./Profile/ProfileRoute";
 import Search from "./Search/Search";
+import NotFound from "./Layouts/NotFound";
+import AdminRoutes from "./Admin/AdminRoutes";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path={'/search'} component={Search} />
         <Route path={'/rooms'} component={RoomRoutes}/>
         <Route path={'/profile'} component={ProfileRoute} />
+        <Route path={'/admin'} component={AdminRoutes} />
+        <Route path='*' exact={true} component={NotFound} />
       </Switch>
     </div>
   );

@@ -8,6 +8,13 @@ export default class RoomService {
 		this.countries = [];
 	}
 
+	getRoomBookings(id) {
+		const url = `${apiUrl}/rooms/${id}/bookings`
+		return authService.fetch(url).then(bookings => {
+			return Promise.resolve(bookings);
+		})
+	}
+
 	getCountries() {
 		const url = apiUrl + '/countries';
 		const headers = {
@@ -27,12 +34,12 @@ export default class RoomService {
 		})
 	}
 
-	createRoom(roomParams, filters) {
+	createRoom(roomParams, filters, images, mainImage) {
 		const url = apiUrl + '/rooms';
 		return authService.fetch(url, {
 			method: 'POST',
 			body: JSON.stringify({
-				roomParams, filters
+				roomParams, filters, images, mainImage
 			})
 		}).then(res => {
 			return Promise.resolve(res)

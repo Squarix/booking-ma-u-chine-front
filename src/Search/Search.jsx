@@ -75,6 +75,7 @@ class Search extends React.Component {
 		priceMax: 1000,
 		priceMin: 0,
 		priceValues: [0, 1000],
+		filters: [],
 		guestsAmount: '',
 		size: '',
 		address: '',
@@ -99,9 +100,10 @@ class Search extends React.Component {
 	handleSearch = () => {
 		const stateValues = {
 			description: this.state.description,
-			guestsAmount: this.state.guestsAmount,
-			size: this.state.size,
-			address: this.state.address
+			guestsamount: Number.parseInt(this.state.guestsAmount),
+			size: Number.parseInt(this.state.size),
+			address: this.state.address,
+			filters: this.state.filters,
 		};
 
 		let params = {};

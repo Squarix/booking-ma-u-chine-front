@@ -1,13 +1,15 @@
 import 'date-fns';
 import React from 'react';
 import Grid from "@material-ui/core/Grid";
-import {Typography} from "@material-ui/core";
+import {Container, Typography} from "@material-ui/core";
 import RoomService from '../_services/RoomService';
 import styles from './styles';
 import withStyles from "@material-ui/core/styles/withStyles";
 import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
 
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import {Carousel} from 'react-responsive-carousel';
 
 import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -15,10 +17,15 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 
 import "react-datepicker/dist/react-datepicker.css";
+import {apiUrl} from "./../_services/config";
+
 
 import DatePicker from "react-datepicker";
 import Button from "@material-ui/core/Button";
 import Redirect from "react-router-dom/es/Redirect";
+import InfoDialog from "../Layouts/InfoDialog";
+import Footer from "../Layouts/Footer";
+import Menu from "../Layouts/Menu";
 
 const roomService = new RoomService();
 
@@ -33,6 +40,7 @@ class ViewRoom extends React.Component {
 			city: '',
 			description: '',
 			filters: [],
+			images: [],
 			guestsamount: 0,
 			size: 0,
 			todayprice: 0,
@@ -40,12 +48,22 @@ class ViewRoom extends React.Component {
 			startDate: null,
 			endDate: null,
 			totalPrice: null,
-			redirectCabinet: false
+			redirectCabinet: false,
+
+			message: '',
+			dialogOpen: false,
+			title: 'Booking Info'
 		}
 	}
 
 	onStartDateChange = (date) => {
 		this.handleDateChanged(date, null);
+	};
+
+	handleDialogClose = () => {
+		this.setState({
+			dialogOpen: false
+		})
 	};
 
 	handleDateChanged = (newStartDate, newEndDate) => {
@@ -72,6 +90,12 @@ class ViewRoom extends React.Component {
 
 	componentDidMount() {
 		const roomId = this.props.match.params.id;
+		roomService.getRoomBookings(roomId).then(bookings => {
+			console.log(bookings)
+			this.setState({
+				bookedDates: bookings
+			})
+		});
 		roomService.getRoom(roomId).then(room => {
 			console.log(room);
 			this.setState(room);
@@ -86,13 +110,24 @@ class ViewRoom extends React.Component {
 			startDate: this.state.startDate,
 			endDate: this.state.endDate
 		};
+
+		let message;
 		roomService.bookRoom(params)
 			.then(res => {
-				console.log(res)
+				message = res.message;
 			})
-			.catch(e =>{
-				e.response.json().then(data => {
-					console.log(data.message);
+			.catch(e => {
+				e.response.json()
+					.then(data => {
+						this.setState({
+							message: data.message
+						});
+					})
+			})
+			.finally(() => {
+				this.setState({
+					message: message,
+					dialogOpen: true
 				})
 			})
 	}
@@ -101,70 +136,97 @@ class ViewRoom extends React.Component {
 		const {classes} = this.props;
 
 		return (
-			<Grid container>
-				<Grid xs={9} className={classes.content} item>
-					<Typography variant={'h1'} className={classes.header}>{this.state.address}</Typography>
-					<p>{this.state.description}</p>
-				</Grid>
-				<Grid xs={3} className={classes.sidebars} item>
-					<List>
-						<ListItem className={classes.label}>
-							<GroupIcon/>
-							<span>{'max '}{this.state.guestsamount} guests</span>
-						</ListItem>
-						<ListItem className={classes.label}>
-							<AttachMoneyIcon/>
-							<span>{' ~'}{this.state.todayprice} per day</span>
-						</ListItem>
-						<ListItem className={classes.label}>
-							<LocationOnIcon/>
-							<span>{this.state.city}</span>
-						</ListItem>
-						<ListItem className={classes.label}>
-							<PermIdentityIcon/>
-							<span>{this.state.useremail}</span>
-						</ListItem>
-						<ListItem className={classes.label}>
-							<DatePicker
-								name={'startDate'}
-								selected={this.state.startDate}
-								className={classes.datePicker}
-								onChange={this.onStartDateChange}
-								placeholderText='Select start date'
-								dateFormat={'d MMMM yyyy'}
-								filterDate={(date) => isValidDate(this.state.bookedDates, date, null, this.state.endDate)}
-							/>
-						</ListItem>
-						<ListItem className={classes.label}>
-							<DatePicker
-								name={'endDate'}
-								className={classes.datePicker}
-								selected={this.state.endDate}
-								onChange={this.onEndDateChange}
-								placeholderText='Select end date'
-								dateFormat={'d MMMM yyyy'}
-								filterDate={(date) => isValidDate(this.state.bookedDates, date, this.state.startDate, null)}
-							/>
-						</ListItem>
-						{this.state.totalPrice ?
-							<React.Fragment>
+			<React.Fragment>
+				<Menu/>
+				<Container fixed>
+					<Grid container className={classes.bodyContainer}>
+						<Grid xs={9} className={classes.content} item>
+							<Typography variant={'h1'} className={classes.header}>{this.state.address}</Typography>
+							<Carousel className={classes.carousel}>
+								{this.state.images.map(image =>
+									<div className={classes.roomImageDiv}>
+										<img src={`${apiUrl}/${image}`} className={classes.roomImage}/>
+									</div>
+								)}
+							</Carousel>
+							<div className={classes.descriptionBlock}>
+								<Typography variant={'h4'}>Description</Typography>
+								<p className={classes.description}>
+									{this.state.description}
+								</p>
+							</div>
+						</Grid>
+						<InfoDialog
+							open={this.state.dialogOpen}
+							message={this.state.message}
+							title={this.state.title}
+							handleClose={this.handleDialogClose}
+						/>
+						<Grid xs={3} className={classes.sidebars} item>
+							<List>
 								<ListItem className={classes.label}>
-									<span>Total: {this.state.totalPrice} $</span>
+									<GroupIcon/>
+									<span>{'max '}{this.state.guestsamount} guests</span>
 								</ListItem>
 								<ListItem className={classes.label}>
-									<Button onClick={this.handleBooking} variant="contained" color="primary" className={classes.button}>
-										Book
-									</Button>
+									<AttachMoneyIcon/>
+									<span>{' ~'}{this.state.todayprice} per day</span>
 								</ListItem>
-							</React.Fragment> : ''
+								<ListItem className={classes.label}>
+									<LocationOnIcon/>
+									<span>{this.state.city}</span>
+								</ListItem>
+								<ListItem className={classes.label}>
+									<PermIdentityIcon/>
+									<span>{this.state.useremail}</span>
+								</ListItem>
+								<ListItem className={classes.label}>
+									<DatePicker
+										name={'startDate'}
+										selected={this.state.startDate}
+										className={classes.datePicker}
+										onChange={this.onStartDateChange}
+										placeholderText='Select start date'
+										dateFormat={'d MMMM yyyy'}
+										filterDate={(date) => isValidDate(this.state.bookedDates, date, null, this.state.endDate)}
+									/>
+								</ListItem>
+								<ListItem className={classes.label}>
+									<DatePicker
+										name={'endDate'}
+										className={classes.datePicker}
+										selected={this.state.endDate}
+										onChange={this.onEndDateChange}
+										placeholderText='Select end date'
+										dateFormat={'d MMMM yyyy'}
+										filterDate={(date) => isValidDate(this.state.bookedDates, date, this.state.startDate, null)}
+									/>
+								</ListItem>
+								{this.state.totalPrice ?
+									<React.Fragment>
+										<ListItem className={classes.label}>
+											<span>Total: {this.state.totalPrice} $</span>
+										</ListItem>
+										<ListItem className={classes.label}>
+											<Button onClick={this.handleBooking} variant="contained" color="primary"
+											        className={classes.button}>
+												Book
+											</Button>
+										</ListItem>
+									</React.Fragment> : ''
+								}
+							</List>
+						</Grid>
+						{
+							this.state.redirectCabinet ?
+								<Redirect to={'/profile/bookings'}/> : ''
 						}
-					</List>
-				</Grid>
-				{
-					this.state.redirectCabinet?
-					<Redirect to={'/profile/bookings'} /> : ''
-				}
-			</Grid>
+
+					</Grid>
+
+				</Container>
+				<Footer/>
+			</React.Fragment>
 		)
 	}
 }
@@ -179,7 +241,16 @@ function isValidDate(bookedDates, date, startDate, endDate) {
 	minDate = startDate ? startDate : minDate;
 	maxDate = endDate ? endDate : maxDate;
 
-	return (bookedDates.indexOf(date.toDateString()) === -1) && (date > minDate) && (date < maxDate)
+	return (checkDate(bookedDates, date) && (date > minDate) && (date < maxDate))
+}
+
+function checkDate(dates, searchDate) {
+	for (const date of dates) {
+		if (new Date(date.startdate) <= searchDate && searchDate <= new Date(date.enddate))
+			return false
+	}
+
+	return true;
 }
 
 function getDifferenceInDays(startDate, endDate) {

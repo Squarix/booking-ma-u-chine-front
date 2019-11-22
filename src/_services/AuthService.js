@@ -36,9 +36,29 @@ export default class AuthService {
 		})
 	}
 
+	moderatorIn() {
+		const token = this.getToken()
+		return !!token && !this.isUserModerator(token)
+	}
+
 	loggedIn() {
 		const token = this.getToken()
 		return !!token && !this.isTokenExpired(token)
+	}
+
+	isUserModerator(token) {
+		try {
+			const decoded = decode(token);
+			console.log(decoded);
+			if (decoded.exp < Date.now() / 1000 && decoded.type === 'moderator') {
+				return true
+			}
+			else
+				return false
+		}
+		catch (err) {
+			return false
+		}
 	}
 
 	isTokenExpired(token) {
@@ -54,6 +74,7 @@ export default class AuthService {
 			return false
 		}
 	}
+
 
 	setToken(idToken) {
 		// Saves user token to localStorage

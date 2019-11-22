@@ -3,6 +3,9 @@ import Grid from "@material-ui/core/Grid";
 import RoomService from "../_services/RoomService";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import RoomCard from "./components/RoomCard";
+import {Container} from "@material-ui/core";
+import Footer from "../Layouts/Footer";
+import Menu from "../Layouts/Menu";
 
 const roomService = new RoomService();
 
@@ -36,15 +39,21 @@ export default class ListRooms extends React.Component {
 
 	render() {
 		return (
-			<Grid container spacing={4}>
-				{!this.state.isLoading ?
-					this.state.rooms.map((room, index) =>
-						<Grid key={index} item xs={4}>
-							<RoomCard {...room} />
-						</Grid>)
-					: <CircularProgress/>
-				}
-			</Grid>
+			<React.Fragment>
+				<Menu/>
+				<Container fixed>
+					<Grid container spacing={4} style={{padding: '50px 0 100px 0'}}>
+						{!this.state.isLoading ?
+							this.state.rooms.map((room, index) =>
+								<Grid key={index} item xs={4}>
+									<RoomCard {...room} />
+								</Grid>)
+							: <CircularProgress/>
+						}
+					</Grid>
+				</Container>
+				<Footer/>
+			</React.Fragment>
 		)
 	}
 }

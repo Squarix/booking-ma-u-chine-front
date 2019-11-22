@@ -11,7 +11,6 @@ import AuthService from '../_services/AuthService';
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 
@@ -78,32 +77,41 @@ export default function Menu() {
 			<List>
 				<ListItem button>
 					<Link underline='none' color='inherit' href={'/search'}>
-						<ListItemText primary={'Search'} />
+						<ListItemText primary={'Search'}/>
 					</Link>
 				</ListItem>
 				<ListItem button>
 					<Link underline='none' color='inherit' href={'/rooms'}>
-						<ListItemText primary={'Rooms'} />
+						<ListItemText primary={'Rooms'}/>
 					</Link>
 				</ListItem>
 				<ListItem button>
 					<Link underline='none' color='inherit' href={'/profile'}>
-						<ListItemText primary={'Profile'} />
+						<ListItemText primary={'Profile'}/>
 					</Link>
 				</ListItem>
 			</List>
 			<Divider/>
 			<List>
-				<ListItem button>
-					<Link underline='none' color='inherit' href={'/sign-in'}>
-						<ListItemText primary={'Sign in'} />
-					</Link>
-				</ListItem>
-				<ListItem button>
-					<Link underline='none' color='inherit' href={'/sign-up'}>
-						<ListItemText primary={'Sign up'} />
-					</Link>
-				</ListItem>
+				{!auth.loggedIn() ?
+					<React.Fragment>
+						<ListItem button>
+							<Link underline='none' color='inherit' href={'/sign-in'}>
+								<ListItemText primary={'Sign in'}/>
+							</Link>
+						</ListItem>
+						<ListItem button>
+							<Link underline='none' color='inherit' href={'/sign-up'}>
+								<ListItemText primary={'Sign up'}/>
+							</Link>
+						</ListItem>
+					</React.Fragment> :
+					<ListItem button>
+						<Link underline='none' color='inherit' href={'/sign-up'}>
+							<ListItemText primary={'Sign out'}/>
+						</Link>
+					</ListItem>
+				}
 			</List>
 		</div>
 	);

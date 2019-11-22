@@ -5,7 +5,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import {withStyles} from "@material-ui/core";
+import {Container, withStyles} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
@@ -16,6 +16,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Slide from "@material-ui/core/Slide";
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Menu from "../Layouts/Menu";
+import Footer from "../Layouts/Footer";
 
 const roomService = new RoomService();
 
@@ -24,7 +27,8 @@ const styles = theme => ({
 		width: '60%', // Fix IE 11 issue.
 		marginTop: theme.spacing(1),
 		display: 'flex',
-		flexDirection: 'column'
+		flexDirection: 'column',
+		marginBottom: '100px',
 	},
 	formControl: {
 		marginTop: theme.spacing(2),
@@ -34,7 +38,7 @@ const styles = theme => ({
 	},
 	container: {
 		display: 'flex',
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	gridItem: {
 		padding: '10px'
@@ -54,6 +58,31 @@ const styles = theme => ({
 	submitButton: {
 		marginTop: '50px',
 		width: '350px'
+	},
+	imageContainer: {
+		backgroundColor: '#e0e0e0',
+		border: '3px solid #9e9e9e',
+		margin: '10px',
+		height: '100%',
+		position: 'relative'
+	},
+	image: {
+		maxWidth: '100%'
+	},
+	grid: {
+		flexGrow: 1,
+		justifyContent: 'center'
+	},
+	mainImage: {
+		maxWidth: '100%',
+		backgroundColor: '#4fc3f7',
+		opacity: '0.5',
+		zIndex: 2,
+		position: 'absolute',
+		width: '100%',
+		height: '100%',
+		left: 0,
+		top: 0
 	}
 });
 
@@ -82,12 +111,21 @@ class NewRoom extends React.Component {
 			newFilter: '',
 			filters: [],
 
+			images: [],
+			mainImage: 0,
+
 			dialogOpen: false,
 			dialogMessage: ''
 
 		};
 
 	}
+
+	handleMainChanged = (index) => {
+		this.setState({
+			mainImage: index
+		})
+	};
 
 	handleCountryChanged = (e) => {
 		this.setState({
@@ -99,6 +137,21 @@ class NewRoom extends React.Component {
 		this.setState({
 			[e.target.name]: e.target.value
 		})
+	};
+
+	handleCapture = ({target}) => {
+		const fileReader = new FileReader();
+		const name = target.accept.includes('image') ? 'images' : 'videos';
+
+		if (target.files.length) {
+			fileReader.readAsDataURL(target.files[0]);
+			fileReader.onload = (e) => {
+				console.log(e.target)
+				this.setState((prevState) => ({
+					[name]: [...prevState[name], e.target.result]
+				}));
+			};
+		}
 	};
 
 	addFilter = () => {
@@ -146,11 +199,11 @@ class NewRoom extends React.Component {
 			size: this.state.size,
 			guestsAmount: this.state.guestsAmount,
 			todayPrice: this.state.todayPrice,
-			city: this.state.selectedCity
+			city: this.state.selectedCity,
 		};
 
-		const {filters} = this.state;
-		roomService.createRoom(room, filters).then((response) => {
+		const {filters, images, mainImage} = this.state;
+		roomService.createRoom(room, filters, images, mainImage).then((response) => {
 			this.setState({
 				dialogMessage: response.message,
 				dialogOpen: true
@@ -171,6 +224,8 @@ class NewRoom extends React.Component {
 		const {classes} = this.props;
 		return (
 			<React.Fragment>
+				<Menu/>
+				<Container fixed>
 				<Grid className={classes.container} container>
 					<form className={classes.form} noValidate onSubmit={event => this.handleFormSubmit(event)}>
 						<Grid container>
@@ -343,6 +398,38 @@ class NewRoom extends React.Component {
 								</Button>
 							</Grid>
 							<Grid item xs={12} className={classes.gridItem}>
+								<input
+									accept="image/*"
+									style={{display: 'none'}}
+									id="button-file"
+									name='images'
+									multiple
+									type="file"
+									onChange={this.handleCapture}
+								/>
+								<label htmlFor="button-file">
+									<Button
+										variant='contained'
+										color='secondary'
+										component='span'
+										startIcon={<CloudUploadIcon/>}
+									>
+										Upload
+									</Button>
+								</label>
+								<Grid className={classes.grid} container>
+									{this.state.images.map((image, index) =>
+										<Grid key={index} xs={5} item className={classes.imageContainer}>
+											<img  onClick={() => this.handleMainChanged(index)} src={image} className={classes.image}/>
+											{this.state.mainImage === index ?
+												<div className={classes.mainImage}/> : ''
+
+											}
+										</Grid>
+									)}
+								</Grid>
+							</Grid>
+							<Grid item xs={12} className={classes.gridItem}>
 								<Button variant={'contained'} color={'primary'} className={classes.submitButton} type={'submit'}>
 									Submit
 								</Button>
@@ -360,7 +447,7 @@ class NewRoom extends React.Component {
 					<DialogTitle id="alert-dialog-slide-title">{"Hey, user"}</DialogTitle>
 					<DialogContent>
 						<DialogContentText id="alert-dialog-slide-description">
-							{ this.state.dialogMessage }
+							{this.state.dialogMessage}
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
@@ -369,6 +456,9 @@ class NewRoom extends React.Component {
 						</Button>
 					</DialogActions>
 				</Dialog>
+
+				</Container>
+				<Footer/>
 			</React.Fragment>
 		);
 	}

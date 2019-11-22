@@ -16,6 +16,7 @@ const useStyles = makeStyles({
 		width: '100%',
 		position: 'fixed',
 		bottom: 0,
+		zIndex: 50
 	},
 
 });
@@ -30,10 +31,8 @@ export default function Footer() {
 
 	return (
 		<BottomNavigation value={value} onChange={handleChange} className={classes.stickToBottom}>
-			<BottomNavigationAction label="Recents" value="recents" icon={<RestoreIcon/>}/>
-			<BottomNavigationAction label="Favorites" value="favorites" icon={<FavoriteIcon/>}/>
-			<BottomNavigationAction label="Nearby" value="nearby" icon={<LocationOnIcon/>}/>
-			<BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon/>}/>
+			<BottomNavigationAction label="Rooms" href={'/rooms'} value="rooms" icon={<LocationOnIcon/>}/>
+			<BottomNavigationAction label="Bookings" href={'/profile/bookings'} value="bookings" icon={<FolderIcon/>}/>
 		</BottomNavigation>
 	);
 }
