@@ -3,8 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import FolderIcon from '@material-ui/icons/Folder';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import AddIcon from '@material-ui/icons/Add';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 const useStyles = makeStyles({
@@ -16,8 +15,19 @@ const useStyles = makeStyles({
 		width: '100%',
 		position: 'fixed',
 		bottom: 0,
-		zIndex: 50
+		zIndex: 50,
+
 	},
+
+	container: {
+		boxShadow: '0px 0px 4px #e0e0e0',
+	},
+
+	hover: {
+		"&:hover": {
+			backgroundColor: '#e0e0e0'
+		}
+	}
 
 });
 
@@ -31,8 +41,14 @@ export default function Footer() {
 
 	return (
 		<BottomNavigation value={value} onChange={handleChange} className={classes.stickToBottom}>
-			<BottomNavigationAction label="Rooms" href={'/rooms'} value="rooms" icon={<LocationOnIcon/>}/>
-			<BottomNavigationAction label="Bookings" href={'/profile/bookings'} value="bookings" icon={<FolderIcon/>}/>
+			<div className={classes.container}>
+				<BottomNavigationAction label="Rooms" href={'/rooms'} value="rooms" className={classes.hover}
+				                        icon={<LocationOnIcon/>}/>
+				<BottomNavigationAction label="Create Room" href={'/rooms/create'} className={classes.hover} value="Create room"
+				                        icon={<AddIcon/>}/>
+				<BottomNavigationAction label="Bookings" href={'/profile/bookings'} className={classes.hover} value="bookings"
+				                        icon={<FolderIcon/>}/>
+			</div>
 		</BottomNavigation>
 	);
 }

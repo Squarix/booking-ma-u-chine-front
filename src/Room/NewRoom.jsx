@@ -5,7 +5,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import {Container, withStyles} from "@material-ui/core";
+import {CircularProgress, Container, withStyles} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
@@ -57,7 +57,8 @@ const styles = theme => ({
 	},
 	submitButton: {
 		marginTop: '50px',
-		width: '350px'
+		width: '100%',
+		maxWidth: '350px',
 	},
 	imageContainer: {
 		backgroundColor: '#e0e0e0',
@@ -115,7 +116,8 @@ class NewRoom extends React.Component {
 			mainImage: 0,
 
 			dialogOpen: false,
-			dialogMessage: ''
+			dialogMessage: '',
+			isFetching: false,
 
 		};
 
@@ -192,6 +194,10 @@ class NewRoom extends React.Component {
 
 	handleFormSubmit = (e) => {
 		e.preventDefault();
+		this.setState({
+			isFetching: true,
+		})
+
 		const room = {
 			countryId: this.state.selectedCountry,
 			address: this.state.address,
@@ -206,7 +212,15 @@ class NewRoom extends React.Component {
 		roomService.createRoom(room, filters, images, mainImage).then((response) => {
 			this.setState({
 				dialogMessage: response.message,
-				dialogOpen: true
+				dialogOpen: true,
+				isFetching: false,
+			})
+		}).catch( async err => {
+			const response = await err.response.json()
+			this.setState({
+				dialogMessage: response.message,
+				dialogOpen: true,
+				isFetching: false,
 			})
 		});
 	};
@@ -229,7 +243,7 @@ class NewRoom extends React.Component {
 				<Grid className={classes.container} container>
 					<form className={classes.form} noValidate onSubmit={event => this.handleFormSubmit(event)}>
 						<Grid container>
-							<Grid item xs={6} className={classes.gridItem}>
+							<Grid item xs={12} md={6} className={classes.gridItem}>
 								<FormControl className={classes.formControl} fullWidth>
 									<InputLabel id="demo-simple-select-label">Country</InputLabel>
 									<Select
@@ -246,7 +260,7 @@ class NewRoom extends React.Component {
 									</Select>
 								</FormControl>
 							</Grid>
-							<Grid item xs={6} className={classes.gridItem}>
+							<Grid item xs={12} md={6} className={classes.gridItem}>
 								<FormControl className={classes.formControl} variant="outlined" fullWidth>
 									<InputLabel htmlFor="component-outlined">
 										City
@@ -262,7 +276,7 @@ class NewRoom extends React.Component {
 									/>
 								</FormControl>
 							</Grid>
-							<Grid item xs={6} className={classes.gridItem}>
+							<Grid item xs={12} md={6} className={classes.gridItem}>
 								<FormControl className={classes.formControl} variant="outlined" fullWidth>
 									<InputLabel htmlFor="component-outlined">
 										Address
@@ -295,7 +309,7 @@ class NewRoom extends React.Component {
 									/>
 								</FormControl>
 							</Grid>
-							<Grid item xs={6} className={classes.gridItem}>
+							<Grid item xs={12} md={6} className={classes.gridItem}>
 								<FormControl className={classes.formControl} variant="outlined" fullWidth>
 									<InputLabel htmlFor="component-outlined">
 										Guests amount
@@ -311,7 +325,7 @@ class NewRoom extends React.Component {
 									/>
 								</FormControl>
 							</Grid>
-							<Grid item xs={6} className={classes.gridItem}>
+							<Grid item xs={12} md={6} className={classes.gridItem}>
 								<FormControl className={classes.formControl} variant="outlined" fullWidth>
 									<InputLabel htmlFor="component-outlined">
 										Rooms amount
@@ -327,7 +341,7 @@ class NewRoom extends React.Component {
 									/>
 								</FormControl>
 							</Grid>
-							<Grid item xs={6} className={classes.gridItem}>
+							<Grid item xs={12} md={6} className={classes.gridItem}>
 								<FormControl className={classes.formControl} variant="outlined" fullWidth>
 									<InputLabel htmlFor="component-outlined">
 										Today price ($)
@@ -359,15 +373,15 @@ class NewRoom extends React.Component {
 									</Paper> : ''
 								}
 							</Grid>
-							<Grid item xs={4} className={classes.gridItem}>
+							<Grid item md={4} xs={12} className={classes.gridItem}>
 								<FormControl className={classes.formControl} fullWidth>
-									<InputLabel id="demo-simple-select-label">Filter category</InputLabel>
+									<InputLabel id='demo-simple-select-label'>Filter category</InputLabel>
 									<Select
 										labelWidth={200}
 										value={this.state.newFilterCategory}
 										onChange={event => this.handleFilterCategoryChange(event)}
 									>
-										<MenuItem value=""/>
+										<MenuItem value=''/>
 										{
 											this.state.filterCategories.map(category =>
 												<MenuItem key={category.id} value={category.id}> {category.name}</MenuItem>
@@ -376,13 +390,13 @@ class NewRoom extends React.Component {
 									</Select>
 								</FormControl>
 							</Grid>
-							<Grid item xs={4} className={classes.gridItem}>
-								<FormControl className={classes.formControl} variant="outlined" fullWidth>
-									<InputLabel htmlFor="component-outlined">
+							<Grid item md={4} xs={12} className={classes.gridItem}>
+								<FormControl className={classes.formControl} variant='outlined' fullWidth>
+									<InputLabel htmlFor='component-outlined'>
 										Filter
 									</InputLabel>
 									<OutlinedInput
-										id="component-outlined"
+										id='component-outlined'
 										labelWidth={50}
 										name={'newFilter'}
 										value={this.state.newFilter}
@@ -392,22 +406,22 @@ class NewRoom extends React.Component {
 									/>
 								</FormControl>
 							</Grid>
-							<Grid item xs={4} className={classes.gridItem}>
+							<Grid item md={4} xs={12} className={classes.gridItem}>
 								<Button variant={'contained'} className={classes.addButton} onClick={() => this.addFilter()}>
 									Add filter
 								</Button>
 							</Grid>
 							<Grid item xs={12} className={classes.gridItem}>
 								<input
-									accept="image/*"
+									accept='image/*'
 									style={{display: 'none'}}
-									id="button-file"
+									id='button-file'
 									name='images'
 									multiple
-									type="file"
+									type='file'
 									onChange={this.handleCapture}
 								/>
-								<label htmlFor="button-file">
+								<label htmlFor='button-file'>
 									<Button
 										variant='contained'
 										color='secondary'
@@ -419,7 +433,7 @@ class NewRoom extends React.Component {
 								</label>
 								<Grid className={classes.grid} container>
 									{this.state.images.map((image, index) =>
-										<Grid key={index} xs={5} item className={classes.imageContainer}>
+										<Grid key={index} xs={12} md={5} item className={classes.imageContainer}>
 											<img  onClick={() => this.handleMainChanged(index)} src={image} className={classes.image}/>
 											{this.state.mainImage === index ?
 												<div className={classes.mainImage}/> : ''
@@ -430,9 +444,12 @@ class NewRoom extends React.Component {
 								</Grid>
 							</Grid>
 							<Grid item xs={12} className={classes.gridItem}>
-								<Button variant={'contained'} color={'primary'} className={classes.submitButton} type={'submit'}>
-									Submit
-								</Button>
+								{ this.state.isFetching?
+									<CircularProgress size={32} className={classes.submitButton} /> :
+									<Button variant={'contained'} color={'primary'} className={classes.submitButton} type={'submit'}>
+										Submit
+									</Button>
+								}
 							</Grid>
 						</Grid>
 					</form>
@@ -441,17 +458,17 @@ class NewRoom extends React.Component {
 					open={this.state.dialogOpen}
 					TransitionComponent={Transition}
 					keepMounted
-					aria-labelledby="alert-dialog-slide-title"
-					aria-describedby="alert-dialog-slide-description"
+					aria-labelledby='alert-dialog-slide-title'
+					aria-describedby='alert-dialog-slide-description'
 				>
-					<DialogTitle id="alert-dialog-slide-title">{"Hey, user"}</DialogTitle>
+					<DialogTitle id='alert-dialog-slide-title'>Hey, user</DialogTitle>
 					<DialogContent>
-						<DialogContentText id="alert-dialog-slide-description">
+						<DialogContentText id='alert-dialog-slide-description'>
 							{this.state.dialogMessage}
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
-						<Button onClick={() => this.handleDialogClose()} color="primary">
+						<Button onClick={() => this.handleDialogClose()} color='primary'>
 							OK
 						</Button>
 					</DialogActions>

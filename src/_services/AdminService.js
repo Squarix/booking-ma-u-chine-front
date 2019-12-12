@@ -8,8 +8,20 @@ export default class AdminService {
 	}
 
 	getHome() {
-		const url = apiUrl + '/admin/';
+		const url = `${apiUrl}/admin/`;
 		return authService.fetch(url).then(res => {
+			return Promise.resolve(res);
+		})
+	}
+
+	updateStatus(roomId, newStatus) {
+		const url = `${apiUrl}/admin/rooms/${roomId}`;
+		return authService.fetch(url, {
+			method: 'PUT',
+			body: JSON.stringify({
+				newStatus: newStatus,
+			}),
+		}).then(res => {
 			return Promise.resolve(res);
 		})
 	}

@@ -23,7 +23,7 @@ function Copyright() {
 			{'Copyright © '}
 			<Link color="inherit" href="https://github.com/Squarix">
 				Пожылая торпеда
-			</Link>{' '}ded@mail.ru
+			</Link>{' '}
 			{new Date().getFullYear()}
 			{'.'}
 		</Typography>
@@ -77,14 +77,16 @@ export default function SignUp() {
 			.then(res => {
 				setRedirect('/');
 			})
-			.catch(err => {
-				console.log(err);
+			.catch(async err => {
+				const response = await err.response.json()
+				setError(response.message)
 			});
 
 	};
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [redirect, setRedirect] = useState('');
+	const [error, setError] = useState('');
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -126,6 +128,9 @@ export default function SignUp() {
 					{/*	control={<Checkbox value="remember" color="primary" />}*/}
 					{/*	label="Remember me"*/}
 					{/*/>*/}
+					<Typography variant="caption" color="error">
+						{error}
+					</Typography>
 					<Button
 						type="submit"
 						fullWidth

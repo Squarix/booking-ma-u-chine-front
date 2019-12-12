@@ -7,8 +7,10 @@ export default class BookingService {
 	constructor(props) {
 	}
 
-	getBookings() {
-		const url = apiUrl + '/bookings/';
+	getBookings(params = {}) {
+		const url = new URL(apiUrl + '/bookings');
+		Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
 		return authService.fetch(url).then(res => {
 			return Promise.resolve(res);
 		})

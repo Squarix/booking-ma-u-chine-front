@@ -9,6 +9,7 @@ import ProfileRoute from "./Profile/ProfileRoute";
 import Search from "./Search/Search";
 import NotFound from "./Layouts/NotFound";
 import AdminRoutes from "./Admin/AdminRoutes";
+import Forbidden from "./Layouts/Forbidden";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path={'/rooms'} component={RoomRoutes}/>
         <Route path={'/profile'} component={ProfileRoute} />
         <Route path={'/admin'} component={AdminRoutes} />
+        <Route path={'/403'} component={Forbidden} />
         <Route path='*' exact={true} component={NotFound} />
       </Switch>
     </div>

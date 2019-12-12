@@ -41,26 +41,26 @@ const sections = [
 ];
 
 const tileData = [
-	{
-		img: '/background.jpg',
-		title: 'Uladzislau Bogdanovskiy',
-		author: 'Senior Node.js developer',
-	},
-	{
-		img: '/background.jpg',
-		title: 'Vladislav Bogdanovskiy',
-		author: 'Middle frontend developer',
-	},
-	{
-		img: '/background.jpg',
-		title: 'Uladzislau Bahdanouski',
-		author: 'Junior sql developer',
-	},
-	{
-		img: '/background.jpg',
-		title: 'Vladislav Bahdanouski',
-		author: 'Tech Lead',
-	},
+	// {
+	// 	img: '/fast_parrot.gif',
+	// 	title: 'Fast parrot',
+	// 	author: 'Senior Node.js developer',
+	// },
+	// {
+	// 	img: '/database.gif',
+	// 	title: 'Serious dude',
+	// 	author: 'Middle frontend developer',
+	// },
+	// {
+	// 	img: '/sqldev.gif',
+	// 	title: 'dwayne SQL johnson',
+	// 	author: 'Junior sql developer',
+	// },
+	// {
+	// 	img: '/TechLead.gif',
+	// 	title: 'Mister Typer',
+	// 	author: 'Tech Lead',
+	// },
 ];
 
 export default function Homepage() {

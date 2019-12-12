@@ -13,6 +13,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 import Moment from 'react-moment';
 import Fab from "@material-ui/core/Fab";
+import Grid from "@material-ui/core/Grid";
 
 const bookingService = new BookingService();
 
@@ -46,8 +47,8 @@ class Bookings extends React.Component {
 	}
 
 	getClass(status) {
-		const { classes } = this.props;
-		if(status === 'approved')
+		const {classes} = this.props;
+		if (status === 'approved')
 			return classes.approved;
 		else if (status === 'approving')
 			return classes.approving;
@@ -68,75 +69,77 @@ class Bookings extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props;
+		const {classes} = this.props;
 
 		return (
 			<React.Fragment>
-				<Table className={classes.table} aria-label="simple table">
-					<TableHead>
-						<TableRow>
-							<TableCell>Room</TableCell>
-							<TableCell align="right">User</TableCell>
-							<TableCell align="right">Address</TableCell>
-							<TableCell align="right">Arrive&nbsp;date</TableCell>
-							<TableCell align="right">City</TableCell>
-							<TableCell align="right">End&nbsp;date</TableCell>
-							<TableCell align="right">Guests amount</TableCell>
-							<TableCell align="right">Price</TableCell>
-							<TableCell align="right">Status</TableCell>
-							<TableCell />
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{this.state.rents.map((booking, index) => (
-							<TableRow key={booking.index}>
-								<TableCell component="th" scope="row">
-									<a href={`/rooms/${booking.roomid}`}>
-										{booking.roomid}
-									</a>
-								</TableCell>
-								<TableCell align="right">
-									<a href={`/users/${booking.userid}`}>
-										{booking.useremail}
-									</a>
-								</TableCell>
-								<TableCell align="right" scope="row">
-									{booking.address}
-								</TableCell>
-								<TableCell align="right">
-									<Moment format={'MMM Do YY'}>
-										{booking.arrivedate}
-									</Moment>
-								</TableCell>
-								<TableCell align="right">{booking.city}</TableCell>
-								<TableCell align="right">
-									<Moment format={'MMM Do YY'}>
-										{booking.enddate}
-									</Moment>
-								</TableCell>
-								<TableCell align="right">{booking.guestsamount}</TableCell>
-								<TableCell align="right">{booking.price}</TableCell>
-								<TableCell align="right" className={this.getClass(booking.status)}>{booking.status}</TableCell>
-								<TableCell align="right">
-									{ booking.status === 'approving'?
-										<React.Fragment>
-											<Fab color="primary" size="small"
-											     onClick={() => this.changeStatus('approved', booking.rentid)}
-											     aria-label="Approve" className={classes.fab}>
-												<CheckIcon/>
-											</Fab>
-											< Fab color="secondary" size="small"
-											onClick={() => this.changeStatus('declined', booking.rentid)}
-											aria-label="Decline" className={classes.fab}>
-											<ClearIcon />
-											</Fab>
-										</React.Fragment> : ''
-									}
-								</TableCell>
+				<Grid container xs={12} className={classes.tableContainer}>
+					<Table aria-label="simple table">
+						<TableHead>
+							<TableRow>
+								<TableCell>Room</TableCell>
+								<TableCell align="right">User</TableCell>
+								<TableCell align="right">Address</TableCell>
+								<TableCell align="right">Arrive&nbsp;date</TableCell>
+								<TableCell align="right">City</TableCell>
+								<TableCell align="right">End&nbsp;date</TableCell>
+								<TableCell align="right">Guests amount</TableCell>
+								<TableCell align="right">Price</TableCell>
+								<TableCell align="right">Status</TableCell>
+								<TableCell/>
 							</TableRow>
-						))}
-					</TableBody>
-				</Table>
+						</TableHead>
+						<TableBody>
+							{this.state.rents.map((booking, index) => (
+								<TableRow key={booking.index}>
+									<TableCell component="th" scope="row">
+										<a href={`/rooms/${booking.roomid}`}>
+											{booking.roomid}
+										</a>
+									</TableCell>
+									<TableCell align="right">
+										<a href={`/users/${booking.userid}`}>
+											{booking.useremail}
+										</a>
+									</TableCell>
+									<TableCell align="right" scope="row">
+										{booking.address}
+									</TableCell>
+									<TableCell align="right">
+										<Moment format={'MMM Do YY'}>
+											{booking.arrivedate}
+										</Moment>
+									</TableCell>
+									<TableCell align="right">{booking.city}</TableCell>
+									<TableCell align="right">
+										<Moment format={'MMM Do YY'}>
+											{booking.enddate}
+										</Moment>
+									</TableCell>
+									<TableCell align="right">{booking.guestsamount}</TableCell>
+									<TableCell align="right">{booking.price}</TableCell>
+									<TableCell align="right" className={this.getClass(booking.status)}>{booking.status}</TableCell>
+									<TableCell align="right">
+										{booking.status === 'approving' ?
+											<React.Fragment>
+												<Fab color="primary" size="small"
+												     onClick={() => this.changeStatus('approved', booking.rentid)}
+												     aria-label="Approve" className={classes.fab}>
+													<CheckIcon/>
+												</Fab>
+												< Fab color="secondary" size="small"
+												      onClick={() => this.changeStatus('declined', booking.rentid)}
+												      aria-label="Decline" className={classes.fab}>
+													<ClearIcon/>
+												</Fab>
+											</React.Fragment> : ''
+										}
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</Grid>
 			</React.Fragment>
 		)
 	}

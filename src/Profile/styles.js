@@ -13,8 +13,32 @@ const styles = theme => ({
 
 	declined: {
 		color: '#dd2c00'
-	}
+	},
+	profileEntry: {
+		display: 'flex',
+		flexDirection: 'column'
+	},
+	main: {
+		textAlign: 'left',
+		margin: '50px 0',
+		display: 'flex',
+		justifyContent: 'right'
+	},
 
+	textField: {
+		marginTop: '5px'
+	},
+
+	editable: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+
+	tableContainer: {
+		overflow: 'hidden',
+		overflowX: 'scroll',
+	}
 });
 
 export default styles;

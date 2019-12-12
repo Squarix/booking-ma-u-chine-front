@@ -4,7 +4,7 @@ import Menu from "../Layouts/Menu";
 import {Container} from "@material-ui/core";
 import Footer from "../Layouts/Footer";
 import ModeratorRoute from "../ModeratorRoute";
-import {Home} from "./Home";
+import Home from "./Home";
 import NotFound from "../Layouts/NotFound";
 
 

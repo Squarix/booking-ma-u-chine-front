@@ -9,7 +9,7 @@ export default function ModeratorRoute({component: Component, ...rest}) {
 		<Route {...rest} render={props => {
 			return authService.moderatorIn() ?
 				<Component {...props} /> :
-				<Redirect to={{pathname: '/sign-in', state: {from: props.location}}}/>
+				<Redirect to={{pathname: '/403', state: {from: props.location}}}/>
 		}}/>
 	);
 };

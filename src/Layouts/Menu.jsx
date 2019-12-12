@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	title: {
 		flexGrow: 1,
+		color: '#FFFFFF'
 	},
 	signButton: {
 		marginLeft: theme.spacing(2),
@@ -47,6 +48,10 @@ export default function Menu() {
 	const [state, setState] = React.useState({
 		top: false,
 	});
+
+	const logOut = () => {
+		auth.logout()
+	};
 
 	const toggleDrawer = (side, open) => event => {
 		if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -90,6 +95,13 @@ export default function Menu() {
 						<ListItemText primary={'Profile'}/>
 					</Link>
 				</ListItem>
+				{ auth.isUserModerator(auth.getToken()) ?
+					<ListItem button>
+						<Link underline='none' color='inherit' href={'/admin'}>
+							<ListItemText primary={'Admin panel'}/>
+						</Link>
+					</ListItem> : ''
+				}
 			</List>
 			<Divider/>
 			<List>
@@ -107,7 +119,7 @@ export default function Menu() {
 						</ListItem>
 					</React.Fragment> :
 					<ListItem button>
-						<Link underline='none' color='inherit' href={'/sign-up'}>
+						<Link underline='none' color='inherit' onClick={logOut}>
 							<ListItemText primary={'Sign out'}/>
 						</Link>
 					</ListItem>
@@ -125,11 +137,11 @@ export default function Menu() {
 					            aria-label="menu">
 						<MenuIcon/>
 					</IconButton>
-					<Typography variant="h6" className={classes.title}>
-						Booking
+					<Typography className={classes.title} variant="h6">
+						<Link className={classes.title} href={'/'}>Booking</Link>
 					</Typography>
 					{
-						auth.loggedIn() ? <div>{profile.email}</div> : SignLinks
+						auth.loggedIn() ? <div><Link className={classes.title} href={'/profile'}>{profile.email}</Link></div> : SignLinks
 					}
 				</Toolbar>
 			</AppBar>

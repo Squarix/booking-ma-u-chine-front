@@ -1,4 +1,6 @@
 import React from 'react'
+import 'date-fns';
+
 import BookingService from '../_services/BookingService';
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -9,10 +11,42 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./styles";
 
 import Moment from 'react-moment';
+import {Grid} from "@material-ui/core";
+import DateFnsUtils from '@date-io/date-fns';
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 
 const bookingService = new BookingService();
 
 class Bookings extends React.Component {
+
+	handleStartDateChange = (date) => {
+		this.handleDateChange('startDate', date)
+	}
+
+	handleEndDateChange = (date) => {
+		this.handleDateChange('endDate', date)
+	}
+
+	handleDateChange = (name, date) => {
+		this.setState({
+			[name]: date
+		})
+		bookingService.getBookings({
+			startDate: this.state.startDate ? new Date(this.state.startDate).getTime() : '',
+			endDate: this.state.endDate ? new Date(this.state.endDate).getTime() : '',
+			[name]: new Date(date).getTime()
+		}).then(bookings => {
+			console.log(bookings);
+			this.setState({
+				bookings: bookings,
+				isFetching: false
+			})
+		})
+			.catch(error => {
+
+			})
+	}
+
 	constructor(props) {
 		super(props);
 		console.log('hi');
@@ -20,6 +54,8 @@ class Bookings extends React.Component {
 
 	state = {
 		bookings: [],
+		startDate: null,
+		endDate: null,
 		isFetching: true
 	}
 
@@ -39,8 +75,8 @@ class Bookings extends React.Component {
 	}
 
 	getClass(status) {
-		const { classes } = this.props;
-		if(status === 'approved')
+		const {classes} = this.props;
+		if (status === 'approved')
 			return classes.approved;
 		else if (status === 'approving')
 			return classes.approving;
@@ -49,52 +85,84 @@ class Bookings extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props;
+		const {classes} = this.props;
 
 		return (
 			<React.Fragment>
-				<Table className={classes.table} aria-label="simple table">
-					<TableHead>
-						<TableRow>
-							<TableCell>Room</TableCell>
-							<TableCell align="right">Address</TableCell>
-							<TableCell align="right">Arrive&nbsp;date</TableCell>
-							<TableCell align="right">City</TableCell>
-							<TableCell align="right">End&nbsp;date</TableCell>
-							<TableCell align="right">Guests amount</TableCell>
-							<TableCell align="right">Price</TableCell>
-							<TableCell align="right">Status</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{this.state.bookings.map((booking, index) => (
-							<TableRow key={booking.index}>
-								<TableCell component="th" scope="row">
-									<a href={`/rooms/${booking.room_id}`}>
-									{booking.room_id}
-									</a>
-								</TableCell>
-								<TableCell align="right" scope="row">
-									{booking.address}
-								</TableCell>
-								<TableCell align="right">
-									<Moment format={'MMM Do YY'}>
-										{booking.arrivedate}
-									</Moment>
-								</TableCell>
-								<TableCell align="right">{booking.city}</TableCell>
-								<TableCell align="right">
-									<Moment format={'MMM Do YY'}>
-										{booking.enddate}
-									</Moment>
-								</TableCell>
-								<TableCell align="right">{booking.guestsamount}</TableCell>
-								<TableCell align="right">{booking.price}</TableCell>
-								<TableCell align="right" className={this.getClass(booking.status)}>{booking.status}</TableCell>
+				<MuiPickersUtilsProvider utils={DateFnsUtils}>
+					<Grid container justify="space-around">
+						<KeyboardDatePicker
+							disableToolbar
+							variant="inline"
+							format="dd/MM/yyyy"
+							margin="normal"
+							id="date-picker-inline"
+							label="Arrive date from"
+							value={this.state.startDate}
+							onChange={this.handleStartDateChange}
+							KeyboardButtonProps={{
+								'aria-label': 'change date',
+							}}
+						/>
+						<KeyboardDatePicker
+							disableToolbar
+							variant="inline"
+							format="dd/MM/yyyy"
+							margin="normal"
+							id="date-picker-inline"
+							label="Arrive date to"
+							value={this.state.endDate}
+							onChange={this.handleEndDateChange}
+							KeyboardButtonProps={{
+								'aria-label': 'change date',
+							}}
+						/>
+					</Grid>
+				</MuiPickersUtilsProvider>
+				<Grid container xs={12} className={classes.tableContainer}>
+					<Table className={classes.table} aria-label="simple table">
+						<TableHead>
+							<TableRow>
+								<TableCell>Room</TableCell>
+								<TableCell align="right">Address</TableCell>
+								<TableCell align="right">Arrive&nbsp;date</TableCell>
+								<TableCell align="right">City</TableCell>
+								<TableCell align="right">End&nbsp;date</TableCell>
+								<TableCell align="right">Guests amount</TableCell>
+								<TableCell align="right">Price</TableCell>
+								<TableCell align="right">Status</TableCell>
 							</TableRow>
-						))}
-					</TableBody>
-				</Table>
+						</TableHead>
+						<TableBody>
+							{this.state.bookings.map((booking, index) => (
+								<TableRow key={booking.index}>
+									<TableCell component="th" scope="row">
+										<a href={`/rooms/${booking.room_id}`}>
+											{booking.room_id}
+										</a>
+									</TableCell>
+									<TableCell align="right" scope="row">
+										{booking.address}
+									</TableCell>
+									<TableCell align="right">
+										<Moment format={'MMM Do YY'}>
+											{booking.arrivedate}
+										</Moment>
+									</TableCell>
+									<TableCell align="right">{booking.city}</TableCell>
+									<TableCell align="right">
+										<Moment format={'MMM Do YY'}>
+											{booking.enddate}
+										</Moment>
+									</TableCell>
+									<TableCell align="right">{booking.guestsamount}</TableCell>
+									<TableCell align="right">{booking.price}</TableCell>
+									<TableCell align="right" className={this.getClass(booking.status)}>{booking.status}</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</Grid>
 			</React.Fragment>
 		)
 	}

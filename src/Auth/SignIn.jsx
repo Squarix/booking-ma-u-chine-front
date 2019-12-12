@@ -73,14 +73,16 @@ export default function SignIn() {
 			.then(res => {
 				setRedirect('/');
 			})
-			.catch(err => {
-				console.log(err);
+			.catch(async err => {
+				const response = await err.response.json()
+				setError(response.message)
 			});
 
 	};
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [redirect, setRedirect] = useState('');
+	const [error, setError] = useState('');
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -120,13 +122,15 @@ export default function SignIn() {
 						autoComplete="current-password"
 						onChange={(value) => handlePassword(value)}
 					/>
+					<Typography variant="caption" color="error">
+						{error}
+					</Typography>
 					<Button
 						type="submit"
 						fullWidth
 						variant="contained"
 						color="primary"
 						className={classes.submit}
-
 					>
 						Sign In
 					</Button>

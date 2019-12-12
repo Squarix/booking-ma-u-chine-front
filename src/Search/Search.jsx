@@ -131,7 +131,7 @@ class Search extends React.Component {
 				<Menu/>
 				<Container className={classes.container}>
 					<Grid container>
-						<Grid item xs={3}>
+						<Grid item xs={12} md={3}>
 							<Typography variant={'h5'}>Search params</Typography>
 							<div className={classes.margin}/>
 							<TextField
@@ -179,27 +179,27 @@ class Search extends React.Component {
 								variant='outlined'
 							/>
 							<div className={classes.margin}/>
-							<Typography gutterBottom>Price</Typography>
-							<AirbnbSlider
-								ThumbComponent={AirbnbThumbComponent}
-								onChange={this.handleSliderChange}
-								value={this.state.priceValues}
-								getAriaLabel={index => (index === 0 ? 'Minimum price' : 'Maximum price')}
-								min={this.state.priceMin}
-								max={this.state.priceMax}
-								valueLabelDisplay='on'
-								className={classes.textField}
-							/>
+							{/*<Typography gutterBottom>Price</Typography>*/}
+							{/*<AirbnbSlider*/}
+							{/*	ThumbComponent={AirbnbThumbComponent}*/}
+							{/*	onChange={this.handleSliderChange}*/}
+							{/*	value={this.state.priceValues}*/}
+							{/*	getAriaLabel={index => (index === 0 ? 'Minimum price' : 'Maximum price')}*/}
+							{/*	min={this.state.priceMin}*/}
+							{/*	max={this.state.priceMax}*/}
+							{/*	valueLabelDisplay='on'*/}
+							{/*	className={classes.textField}*/}
+							{/*/>*/}
 							<div className={classes.margin}/>
 							<Button variant='outlined' color='primary' className={classes.button} onClick={this.handleSearch}>
 								Search
 							</Button>
 						</Grid>
-						<Grid item xs={9}>
+						<Grid item xs={12} md={9}>
 							<Grid container>
 								{
 									this.state.rooms.map(room =>
-										<Grid key={room._id} xs={6} item className={classes.resultItem}>
+										<Grid key={room._id} xs={12} md={6} item className={classes.resultItem}>
 											<RoomCard id={room._id} {...room._source}/>
 										</Grid>
 									)

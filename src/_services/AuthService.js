@@ -38,7 +38,7 @@ export default class AuthService {
 
 	moderatorIn() {
 		const token = this.getToken()
-		return !!token && !this.isUserModerator(token)
+		return !!token && this.isUserModerator(token)
 	}
 
 	loggedIn() {
@@ -50,7 +50,7 @@ export default class AuthService {
 		try {
 			const decoded = decode(token);
 			console.log(decoded);
-			if (decoded.exp < Date.now() / 1000 && decoded.type === 'moderator') {
+			if (decoded.exp > Date.now() / 1000 && decoded.type === 'moderator') {
 				return true
 			}
 			else
