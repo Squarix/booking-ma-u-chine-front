@@ -86,18 +86,10 @@ export default function Homepage() {
 					))}
 				</Toolbar>
 			</Container>
-			<Container fixed>
+			<div className={classes.homeContainer} fixed>
 				<Grid container>
 					<Grid item xs={12}>
 						<Paper className={classes.mainFeaturedPost}>
-							{/* Increase the priority of the hero background image */}
-							{
-								<img
-									style={{display: 'none'}}
-									src="/background.jpeg"
-									alt="background"
-								/>
-							}
 							<div className={classes.overlay}/>
 							<Grid container>
 								<Grid item md={6}>
@@ -119,29 +111,8 @@ export default function Homepage() {
 						</Paper>
 					</Grid>
 				</Grid>
-				<div className={classes.root}>
-					<GridList cellHeight={360} className={classes.gridList}>
-						<GridListTile key="Subheader" cols={2} style={{height: 'auto'}}>
-							<ListSubheader component="h2">Our team</ListSubheader>
-						</GridListTile>
-						{tileData.map(tile => (
-							<GridListTile key={tile.img}>
-								<img src={tile.img} alt={tile.title}/>
-								<GridListTileBar
-									title={tile.title}
-									subtitle={<span>{tile.author}</span>}
-									actionIcon={
-										<IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-											<InfoIcon/>
-										</IconButton>
-									}
-								/>
-							</GridListTile>
-						))}
-					</GridList>
-				</div>
-			</Container>
-			<Footer/>
+			</div>
+			{/*{/<Footer/>*/}
 		</React.Fragment>
 	);
 }

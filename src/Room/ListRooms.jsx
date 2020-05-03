@@ -45,7 +45,7 @@ export default class ListRooms extends React.Component {
 					<Grid container spacing={4} style={{padding: '50px 0 100px 0'}}>
 						{!this.state.isLoading ?
 							this.state.rooms.map((room, index) =>
-								<Grid key={index} item xs={12} md={4}>
+								<Grid key={index} item xs={12} sm={6} md={4}>
 									<RoomCard {...room} />
 								</Grid>)
 							: <CircularProgress/>

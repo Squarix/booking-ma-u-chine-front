@@ -9,8 +9,10 @@ const styles = theme => ({
 	},
 
 	content: {
-		paddingLeft: '80px',
-		paddingRight: '25px',
+		[theme.breakpoints.up('md')]: {
+			paddingLeft: '80px',
+			paddingRight: '25px',
+		},
 		display: 'flex',
 		justifyContent: 'left',
 		flexDirection: 'column',

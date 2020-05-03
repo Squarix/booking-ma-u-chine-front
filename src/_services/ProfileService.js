@@ -15,9 +15,6 @@ export default class ProfileService {
 	}
 
 	updateProfile(id, params) {
-		console.log('hi')
-		console.log(id)
-		console.log(params)
 		const url = `${apiUrl}/users/${id}`;
 		return authService.fetch(url, {
 			method: 'PUT',

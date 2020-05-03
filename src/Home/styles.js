@@ -1,4 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import React from "react";
 
 const styles = makeStyles(theme => ({
 	toolbar: {
@@ -29,7 +30,7 @@ const styles = makeStyles(theme => ({
 		position: 'relative',
 		backgroundColor: theme.palette.grey[800],
 		color: theme.palette.common.white,
-		marginBottom: theme.spacing(4),
+		height: 'calc(100vh - 112px)',
 		backgroundImage: 'url(/background.jpg)',
 		filter: 'blur(0.2px)',
 		backgroundSize: 'cover',
@@ -57,6 +58,9 @@ const styles = makeStyles(theme => ({
 	icon: {
 		color: 'rgba(255, 255, 255, 0.54)',
 	},
+
+	homeContainer: {
+	}
 }));
 
 export default styles;

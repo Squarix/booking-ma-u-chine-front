@@ -16,11 +16,12 @@ const useStyles = makeStyles({
 		position: 'fixed',
 		bottom: 0,
 		zIndex: 50,
-
+		background: 'none',
 	},
 
 	container: {
 		boxShadow: '0px 0px 4px #e0e0e0',
+		backgroundColor: '#FFFFFF'
 	},
 
 	hover: {

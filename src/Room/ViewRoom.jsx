@@ -140,7 +140,7 @@ class ViewRoom extends React.Component {
 				<Menu/>
 				<Container fixed>
 					<Grid container className={classes.bodyContainer}>
-						<Grid xs={9} className={classes.content} item>
+						<Grid md={9} xs={12} className={classes.content} item>
 							<Typography variant={'h1'} className={classes.header}>{this.state.address}</Typography>
 							<Carousel className={classes.carousel}>
 								{this.state.images.map(image =>
@@ -162,7 +162,7 @@ class ViewRoom extends React.Component {
 							title={this.state.title}
 							handleClose={this.handleDialogClose}
 						/>
-						<Grid xs={3} className={classes.sidebars} item>
+						<Grid xs={12} md={3} className={classes.sidebars} item>
 							<List>
 								<ListItem className={classes.label}>
 									<GroupIcon/>

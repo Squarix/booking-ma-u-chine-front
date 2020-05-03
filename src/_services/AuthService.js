@@ -38,16 +38,19 @@ export default class AuthService {
 
 	moderatorIn() {
 		const token = this.getToken()
+		console.log()
 		return !!token && this.isUserModerator(token)
 	}
 
 	loggedIn() {
+		console.log('hi')
 		const token = this.getToken()
 		return !!token && !this.isTokenExpired(token)
 	}
 
 	isUserModerator(token) {
 		try {
+			console.log('hi')
 			const decoded = decode(token);
 			console.log(decoded);
 			if (decoded.exp > Date.now() / 1000 && decoded.type === 'moderator') {
@@ -90,7 +93,12 @@ export default class AuthService {
 	}
 
 	getProfile() {
-		return decode(this.getToken())
+		console.log('hi')
+		const token = this.getToken()
+		if (token)
+			return decode(this.getToken())
+		else
+			return null
 	}
 
 
@@ -101,7 +109,7 @@ export default class AuthService {
 		};
 
 		if (this.loggedIn()) {
-			headers['Authorization'] = this.getToken()
+			headers['Authorization'] = `Bearer ${this.getToken()}`
 		}
 
 		return fetch(url, {

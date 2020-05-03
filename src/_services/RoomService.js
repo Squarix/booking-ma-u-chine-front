@@ -34,6 +34,16 @@ export default class RoomService {
 		})
 	}
 
+	updateRoom(params, id) {
+		const url = `${apiUrl}/rooms/${id}`
+		return authService.fetch(url, {
+			method: 'PUT',
+			body: JSON.stringify(params)
+		}).then(res => {
+			return Promise.resolve(res)
+		})
+	}
+
 	createRoom(roomParams, filters, images, mainImage) {
 		const url = apiUrl + '/rooms';
 		return authService.fetch(url, {

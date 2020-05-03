@@ -3,11 +3,9 @@ import {Route, Redirect, Switch} from 'react-router-dom';
 import PrivateRoute from "../PrivateRoute";
 import NewRoom from "./NewRoom";
 import ViewRoom from "./ViewRoom";
-import Menu from "../Layouts/Menu";
-import {Container} from "@material-ui/core";
-import Footer from "../Layouts/Footer";
 import ListRooms from "./ListRooms";
 import NotFound from "../Layouts/NotFound";
+import UpdateRoom from "./UpdateRoom";
 
 
 export default function RoomRoutes(props) {
@@ -15,7 +13,8 @@ export default function RoomRoutes(props) {
 		<React.Fragment>
 				<Switch>
 					<PrivateRoute path={`${props.match.path}/create`} component={NewRoom}/>
-					<Route path={`${props.match.path}/:id(\\d+)`} component={ViewRoom} />
+					<PrivateRoute path={`${props.match.path}/:id(\\d+)/update`} exact={true} component={UpdateRoom} />
+					<Route path={`${props.match.path}/:id(\\d+)`} exact={true} component={ViewRoom} />
 					<Route path={`${props.match.path}/`} exact={true} component={ListRooms} />
 					<Route path='*' exact={true} component={NotFound} />
 				</Switch>

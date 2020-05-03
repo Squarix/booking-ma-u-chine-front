@@ -43,8 +43,8 @@ class Profile extends React.Component {
 
 	handleSave = () => {
 		profileService.updateProfile(this.state.id, {
-			firstName: this.state.firstName,
-			lastName: this.state.lastName,
+			first_name: this.state.firstName,
+			last_name: this.state.lastName,
 			phoneNumber: this.state.phoneNumber
 		}).then(res => {console.log(res)})
 	}
@@ -119,7 +119,6 @@ class Profile extends React.Component {
 						</Grid>
 					</Grid>
 				</Container>
-				<Footer/>
 			</React.Fragment>
 		);
 	}
