@@ -137,25 +137,25 @@ class Bookings extends React.Component {
 							{this.state.bookings.map((booking, index) => (
 								<TableRow key={booking.index}>
 									<TableCell component="th" scope="row">
-										<a href={`/rooms/${booking.room_id}`}>
-											{booking.room_id}
+										<a href={`/rooms/${booking.roomId}`}>
+											{booking.roomId}
 										</a>
 									</TableCell>
 									<TableCell align="right" scope="row">
-										{booking.address}
+										{booking.room.address}
 									</TableCell>
 									<TableCell align="right">
 										<Moment format={'MMM Do YY'}>
-											{booking.arrivedate}
+											{booking.arriveDate}
 										</Moment>
 									</TableCell>
-									<TableCell align="right">{booking.city}</TableCell>
+									<TableCell align="right">{booking.room.city.name}</TableCell>
 									<TableCell align="right">
 										<Moment format={'MMM Do YY'}>
-											{booking.enddate}
+											{booking.endDate}
 										</Moment>
 									</TableCell>
-									<TableCell align="right">{booking.guestsamount}</TableCell>
+									<TableCell align="right">{booking.room.guestsAmount}</TableCell>
 									<TableCell align="right">{booking.price}</TableCell>
 									<TableCell align="right" className={this.getClass(booking.status)}>{booking.status}</TableCell>
 								</TableRow>

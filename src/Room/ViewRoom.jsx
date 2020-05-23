@@ -67,12 +67,13 @@ class ViewRoom extends React.Component {
   };
 
   handleDateChanged = (newStartDate, newEndDate) => {
-    const start = newStartDate ? newStartDate : this.state.startDate;
-    const end = newEndDate ? newEndDate : this.state.endDate;
-    const price = this.state.todayprice;
+    const { endDate, startDate, todayPrice } = this.state;
+    const start = newStartDate ? newStartDate : startDate;
+    const end = newEndDate ? newEndDate : endDate;
+    const price = todayPrice;
     let days = 0;
 
-    if (end & start) {
+    if (end && start) {
       days = getDifferenceInDays(start, end);
       console.log(days);
     }
@@ -106,7 +107,7 @@ class ViewRoom extends React.Component {
     const roomId = this.props.match.params.id;
     const params = {
       roomId: roomId,
-      startDate: this.state.startDate,
+      arriveDate: this.state.startDate,
       endDate: this.state.endDate
     };
 
@@ -201,8 +202,8 @@ class ViewRoom extends React.Component {
                         filterDate={(date) => isValidDate(this.state.bookedDates, date, this.state.startDate, null)}
                     />
                   </ListItem>
-                  {this.state.totalPrice ?
-                      <React.Fragment>
+                  {!!this.state.totalPrice && (
+                      <>
                         <ListItem className={classes.label}>
                           <span>Total: {this.state.totalPrice} $</span>
                         </ListItem>
@@ -212,7 +213,8 @@ class ViewRoom extends React.Component {
                             Book
                           </Button>
                         </ListItem>
-                      </React.Fragment> : ''
+                      </>
+                  )
                   }
                 </List>
               </Grid>
@@ -220,7 +222,6 @@ class ViewRoom extends React.Component {
                 this.state.redirectCabinet ?
                     <Redirect to={'/profile/bookings'}/> : ''
               }
-
             </Grid>
 
           </Container>
@@ -245,7 +246,7 @@ function isValidDate(bookedDates, date, startDate, endDate) {
 
 function checkDate(dates, searchDate) {
   for (const date of dates) {
-    if (new Date(date.startdate) <= searchDate && searchDate <= new Date(date.enddate))
+    if (new Date(date.arriveDate) <= searchDate && searchDate <= new Date(date.endDate))
       return false
   }
 

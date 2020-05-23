@@ -93,42 +93,42 @@ class Bookings extends React.Component {
 							{this.state.rents.map((booking, index) => (
 								<TableRow key={booking.index}>
 									<TableCell component="th" scope="row">
-										<a href={`/rooms/${booking.roomid}`}>
-											{booking.roomid}
+										<a href={`/rooms/${booking.roomId}`}>
+											{booking.roomId}
 										</a>
 									</TableCell>
 									<TableCell align="right">
-										<a href={`/users/${booking.userid}`}>
-											{booking.useremail}
+										<a href={`/users/${booking.userId}`}>
+											{booking.user.email}
 										</a>
 									</TableCell>
 									<TableCell align="right" scope="row">
-										{booking.address}
+										{booking.room.address}
 									</TableCell>
 									<TableCell align="right">
 										<Moment format={'MMM Do YY'}>
-											{booking.arrivedate}
+											{booking.arriveDate}
 										</Moment>
 									</TableCell>
-									<TableCell align="right">{booking.city}</TableCell>
+									<TableCell align="right">{booking.room.city.name}</TableCell>
 									<TableCell align="right">
 										<Moment format={'MMM Do YY'}>
-											{booking.enddate}
+											{booking.endDate}
 										</Moment>
 									</TableCell>
-									<TableCell align="right">{booking.guestsamount}</TableCell>
+									<TableCell align="right">{booking.room.guestsAmount}</TableCell>
 									<TableCell align="right">{booking.price}</TableCell>
 									<TableCell align="right" className={this.getClass(booking.status)}>{booking.status}</TableCell>
 									<TableCell align="right">
 										{booking.status === 'approving' ?
 											<React.Fragment>
 												<Fab color="primary" size="small"
-												     onClick={() => this.changeStatus('approved', booking.rentid)}
+												     onClick={() => this.changeStatus('approved', booking.id)}
 												     aria-label="Approve" className={classes.fab}>
 													<CheckIcon/>
 												</Fab>
 												< Fab color="secondary" size="small"
-												      onClick={() => this.changeStatus('declined', booking.rentid)}
+												      onClick={() => this.changeStatus('declined', booking.id)}
 												      aria-label="Decline" className={classes.fab}>
 													<ClearIcon/>
 												</Fab>
