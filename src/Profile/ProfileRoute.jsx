@@ -2,13 +2,12 @@ import React from 'react';
 import Profile from "./Profile";
 import PrivateRoute from "../PrivateRoute";
 import Bookings from "./Bookings";
-import {Switch} from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Menu from "../Layouts/Menu";
 import {Container} from "@material-ui/core";
 import Footer from "../Layouts/Footer";
 import Rents from "./Rents";
 import NotFound from "../Layouts/NotFound";
-import Route from "react-router-dom/es/Route";
 
 
 export default function ProfileRoute(props) {

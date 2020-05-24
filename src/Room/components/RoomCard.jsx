@@ -7,14 +7,14 @@ import CardActions from "@material-ui/core/CardActions";
 import CardMedia from "@material-ui/core/CardMedia";
 import { Paper, Typography } from "@material-ui/core";
 import PhotoCameraOutlinedIcon from '@material-ui/icons/PhotoCameraOutlined';
-import {apiUrl} from "../../_services/config";
+import { apiUrl } from "../../_services/config";
 
 export default function RoomCard(props) {
   const image = props.images[0]?.imagePath;
 
   return (
       <Card>
-        <CardHeader title={props.address} subheader={props.city?.name || props.city}/>
+        <CardHeader title={props.address} subheader={props.city?.name}/>
         {image ? (
             <CardMedia
                 image={`${apiUrl}/${image}`}

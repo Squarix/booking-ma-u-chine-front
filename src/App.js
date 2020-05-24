@@ -11,7 +11,12 @@ import NotFound from "./Layouts/NotFound";
 import AdminRoutes from "./Admin/AdminRoutes";
 import Forbidden from "./Layouts/Forbidden";
 
+import ReactAudioPlayer from 'react-audio-player';
+
+import { apiUrl } from "./_services/config";
+
 function App() {
+  const song = `${apiUrl}/songs/${Math.round(Math.random()) ? 'HBTB' : 'DGTM'}.mp3`;
   return (
     <div className="App">
       <Switch>
@@ -25,6 +30,11 @@ function App() {
         <Route path={'/403'} component={Forbidden} />
         <Route path='*' exact={true} component={NotFound} />
       </Switch>
+      {/*<ReactAudioPlayer*/}
+      {/*  src={song}*/}
+      {/*  autoPlay*/}
+      {/*  volume={0.02}*/}
+      {/*/>*/}
     </div>
   );
 }

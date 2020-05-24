@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 import RoomCard from '../Room/components/RoomCard';
+import Chip from "@material-ui/core/Chip";
 
 const searchService = new SearchService();
 
@@ -103,7 +104,7 @@ class Search extends React.Component {
       guestsAmount: Number.parseInt(this.state.guestsAmount),
       size: Number.parseInt(this.state.size),
       address: this.state.address,
-      filters: this.state.filters,
+      filters: JSON.stringify(this.state.searchFilters.filter(f => f.selected) || []),
     };
 
     let params = {};
@@ -120,7 +121,20 @@ class Search extends React.Component {
         .then(res => this.setState({rooms: res}));
   }
 
+  chipClicked = id => {
+    const { searchFilters } = this.state;
+    const filter = searchFilters.find(f => f.id === id)
+    filter.selected = !filter.selected;
+
+    this.setState({ searchFilters });
+  }
+
   componentDidMount() {
+    searchService.getFilters()
+        .then(searchFilters => {
+          console.log(searchFilters);
+          this.setState({searchFilters})
+        })
   }
 
   render() {
@@ -178,6 +192,17 @@ class Search extends React.Component {
                     margin='normal'
                     variant='outlined'
                 />
+                <div className={classes.chipsContainer}>
+                  {this.state.searchFilters?.map(filter => (
+                      <Chip
+                          color="primary"
+                          key={filter.id}
+                          onClick={() => this.chipClicked(filter.id)}
+                          label={filter.filter}
+                          variant={filter.selected ? 'default' : 'outlined'}
+                      />
+                  ))}
+                </div>
                 <div className={classes.margin}/>
                 {/*<Typography gutterBottom>Price</Typography>*/}
                 {/*<AirbnbSlider*/}

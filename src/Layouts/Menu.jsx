@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
+import MaterialLink from "@material-ui/core/Link";
 import AuthService from '../_services/AuthService';
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import ListItem from "@material-ui/core/ListItem";
@@ -63,10 +64,10 @@ export default function Menu() {
 
   const SignLinks = (
       <div>
-        <Link href={'/sign-in'} color='inherit' className={classes.signButton}>
-          <Button color="inherit" variant="outlined">Sign In</Button>
+        <Link to={'/sign-in'} color='black' className={classes.signButton}>
+          <Button color="black" variant="outlined">Sign In</Button>
         </Link>
-        <Link href={'/sign-up'} className={classes.signButton}>
+        <Link to={'/sign-up'} className={classes.signButton}>
           <Button color="secondary" variant="outlined">Sign Up</Button>
         </Link>
       </div>
@@ -80,25 +81,25 @@ export default function Menu() {
           onKeyDown={toggleDrawer(side, false)}
       >
         <List>
-          <Link underline='none' color='inherit' href={'/search'}>
+          <Link underline='none' to={'/search'}>
             <ListItem button>
-              <ListItemText primary={'Search'}/>
+              <ListItemText className="link-black" primary={'Search'}/>
             </ListItem>
           </Link>
-          <Link underline='none' color='inherit' href={'/rooms'}>
+          <Link underline='none' color='black' to={'/rooms'}>
             <ListItem button>
-              <ListItemText primary={'Rooms'}/>
+              <ListItemText className="link-black" primary={'Rooms'}/>
             </ListItem>
           </Link>
-          <Link underline='none' color='inherit' href={'/profile'}>
+          <Link underline='none' color='black' to={'/profile'}>
             <ListItem button>
-              <ListItemText primary={'Profile'}/>
+              <ListItemText className="link-black" primary={'Profile'}/>
             </ListItem>
           </Link>
           {auth.isUserModerator(auth.getToken()) && (
-              <Link underline='none' color='inherit' href={'/admin'}>
+              <Link underline='none' color='black' to={'/admin'}>
                 <ListItem button>
-                  <ListItemText primary={'Admin panel'}/>
+                  <ListItemText className="link-black" primary={'Admin panel'}/>
                 </ListItem>
               </Link>
           )}
@@ -106,22 +107,22 @@ export default function Menu() {
         <Divider/>
         <List>
           {!auth.loggedIn() ?
-              <React.Fragment>
+              <>
                 <ListItem button>
-                  <Link underline='none' color='inherit' href={'/sign-in'}>
-                    <ListItemText primary={'Sign in'}/>
+                  <Link underline='none' to={'/sign-in'}>
+                    <ListItemText className="link-black" primary={'Sign in'} />
                   </Link>
                 </ListItem>
                 <ListItem button>
-                  <Link underline='none' color='inherit' href={'/sign-up'}>
-                    <ListItemText primary={'Sign up'}/>
+                  <Link underline='none' to={'/sign-up'}>
+                    <ListItemText className="link-black" primary={'Sign up'}/>
                   </Link>
                 </ListItem>
-              </React.Fragment> :
+              </> :
               <ListItem button>
-                <Link underline='none' color='inherit' onClick={logOut}>
-                  <ListItemText primary={'Sign out'}/>
-                </Link>
+                <MaterialLink underline='none' onClick={logOut}>
+                  <ListItemText className="link-black" primary={'Sign out'}/>
+                </MaterialLink>
               </ListItem>
           }
         </List>
@@ -138,11 +139,11 @@ export default function Menu() {
               <MenuIcon/>
             </IconButton>
             <Typography className={classes.title} variant="h6">
-              <Link className={classes.title} href={'/'}>Booking</Link>
+              <Link className={classes.title} to={'/'}>Booking</Link>
             </Typography>
             {
               auth.loggedIn() ?
-                  <div><Link className={classes.title} href={'/profile'}>{profile.email}</Link></div> : SignLinks
+                  <div><Link className={classes.title} to={'/profile'}>{profile.email}</Link></div> : SignLinks
             }
           </Toolbar>
         </AppBar>

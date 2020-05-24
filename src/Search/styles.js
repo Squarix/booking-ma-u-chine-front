@@ -14,6 +14,15 @@ const styles = theme => ({
 
 	resultItem: {
 		padding: '20px'
+	},
+
+	chipsContainer: {
+		display: 'flex',
+		justifyContent: 'center',
+		flexWrap: 'wrap',
+		'& > *': {
+			margin: theme.spacing(0.5),
+		},
 	}
 });
 

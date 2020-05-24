@@ -15,6 +15,10 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from '@material-ui/icons/Info';
+import AuthService from "../_services/AuthService";
+
+
+const auth = new AuthService();
 
 
 const sections = [
@@ -32,11 +36,13 @@ const sections = [
 	},
 	{
 		title: 'Sign In',
-		link: '/sign-in'
+		link: '/sign-in',
+		authorized: true
 	},
 	{
 		title: 'Sign Up',
-		link: '/sign-up'
+		link: '/sign-up',
+		authorized: true
 	}
 ];
 
@@ -72,7 +78,7 @@ export default function Homepage() {
 			<CssBaseline/>
 			<Container maxWidth="lg">
 				<Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
-					{sections.map(section => (
+					{sections.map(section => ((section.authorized && !auth.loggedIn()) || !section.authorized)  && (
 						<Link
 							color="inherit"
 							noWrap
@@ -86,7 +92,7 @@ export default function Homepage() {
 					))}
 				</Toolbar>
 			</Container>
-			<div className={classes.homeContainer} fixed>
+			<div className={classes.homeContainer}>
 				<Grid container>
 					<Grid item xs={12}>
 						<Paper className={classes.mainFeaturedPost}>
@@ -95,13 +101,11 @@ export default function Homepage() {
 								<Grid item md={6}>
 									<div className={classes.mainFeaturedPostContent}>
 										<Typography component="h1" variant="h3" color="inherit" gutterBottom>
-											BOOKING
+											BOOKING.ww
 										</Typography>
 										<Typography variant="h5" color="inherit" paragraph>
-											Hello there. We are specific hotel complex.
-											Our complex consists of a huge amount of apartments all over the world.
-											Become a part of our network and Book&Rent apartments or share your apartments with others
-											You are welcome
+											As one of the world's largest travel marketplaces for both established brands and entrepreneurs of all sizes,
+											Booking.ww enables properties around the world to reach a global audience and grow their businesses.
 										</Typography>
 										<Link variant="subtitle1" href="#">
 										</Link>

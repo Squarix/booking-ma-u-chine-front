@@ -10,7 +10,7 @@ import NotFound from "../Layouts/NotFound";
 
 export default function AdminRoutes(props) {
 	return (
-		<React.Fragment>
+		<>
 			<Menu/>
 			<Container fixed>
 				<Switch>
@@ -19,7 +19,7 @@ export default function AdminRoutes(props) {
 				</Switch>
 			</Container>
 			<Footer/>
-		</React.Fragment>
+		</>
 	);
 }
 
