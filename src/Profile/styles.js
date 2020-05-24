@@ -20,7 +20,7 @@ const styles = theme => ({
 	},
 	main: {
 		textAlign: 'left',
-		margin: '50px 0',
+		margin: '20px 0',
 		display: 'flex',
 		justifyContent: 'right'
 	},
@@ -38,6 +38,24 @@ const styles = theme => ({
 	tableContainer: {
 		overflow: 'hidden',
 		overflowX: 'scroll',
+	},
+
+	avatarContainer: {
+		padding: '0 20px',
+		display: 'flex',
+		alignItems: 'flex-start'
+	},
+
+	avatarIcon: {
+		width: '100px',
+		height: '100px',
+		marginBottom: '25px'
+	},
+
+	userNameTitle: {
+		padding: '0 16px',
+		marginTop: '50px',
+		marginBottom: '20px'
 	}
 });
 

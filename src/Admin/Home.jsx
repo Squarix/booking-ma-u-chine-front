@@ -78,7 +78,7 @@ class Home extends React.Component {
 									{room.address}
 								</TableCell>
 								<TableCell align="right">
-									{room.cityid}
+									{room.city?.name}
 								</TableCell>
 								<TableCell align="right">{room.description}</TableCell>
 								<TableCell align="right">
@@ -86,7 +86,7 @@ class Home extends React.Component {
 								</TableCell>
 								<TableCell align="right">{room.todayPrice}</TableCell>
 								<TableCell align="right">{room.size}</TableCell>
-								<TableCell align="right">{room.userid}</TableCell>
+								<TableCell align="right">{room.user.email}</TableCell>
 								<TableCell>
 									<Fab color="primary" size="small"
 									     onClick={() => this.changeStatus('publicated', room.id)}

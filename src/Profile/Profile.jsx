@@ -12,6 +12,8 @@ import IconButton from "@material-ui/core/IconButton";
 
 import ProfileService from "../_services/ProfileService";
 import Button from "@material-ui/core/Button";
+import Avatar from "@material-ui/core/Avatar";
+import Divider from "@material-ui/core/Divider";
 
 const profileService = new ProfileService();
 
@@ -64,58 +66,68 @@ class Profile extends React.Component {
     return (
         <React.Fragment>
           <Container fixed>
+            <Typography align="left" variant="h5" className={classes.userNameTitle}>
+              User: {this.state.email}
+            </Typography>
+            <Divider />
             <Grid container className={classes.main} spacing={4}>
-              {editables.map(editable =>
-                  <Grid xs={4} item className={classes.profileEntry}>
-                    <label>{editable.key}</label>
-                    <div className={classes.editable}>
-                      {editable.state !== this.state.editable ?
-                          <React.Fragment>
-                            <Typography key={editable.key} variant={"h5"}>{editable.value || 'Not set'}</Typography>
-                            <IconButton
-                                key={editable.state} aria-label="Edit" className={classes.margin}
-                                onClick={() => this.handleChangeEditable(editable.state)}>
-                              <EditIcon fontSize="small"/>
-                            </IconButton>
-                          </React.Fragment>
-                          :
-                          <React.Fragment>
-                            <TextField
-                                key={editable.key}
-                                id="standard-search"
-                                name={editable.state}
-                                label={editable.key}
-                                value={editable.value || ''}
-                                onChange={this.handleInputChange}
-                                type="text"
-                                className={classes.textField}
-                                margin="normal"
-                            />
-                            <IconButton
-                                key={editable.state} aria-label="Save" className={classes.margin}
-                                onClick={() => this.handleChangeEditable('')}>
-                              <SaveIcon fontSize="small"/>
-                            </IconButton>
-                          </React.Fragment>
-                      }
-                    </div>
-                  </Grid>
-              )}
+              <Grid item md={3} xs={12} direction="column" className={classes.avatarContainer}>
+                <Avatar className={classes.avatarIcon}>OP</Avatar>
+                <div>
+                  <Button href={'/profile/bookings'}>Bookings</Button>
+                </div>
+                <div>
+                  <Button href={'/profile/rents'}>Rents</Button>
+                </div>
+              </Grid>
+              <Grid item md={8} xs={12}>
+                {editables.map(editable =>
+                    <Grid xs={12} xl={6} item className={classes.profileEntry}>
+                      <label>{editable.key}</label>
+                      <div className={classes.editable}>
+                        {editable.state !== this.state.editable ?
+                            <>
+                              <Typography key={editable.key} variant={"h6"}>{editable.value || 'Not set'}</Typography>
+                              <IconButton
+                                  key={editable.state} aria-label="Edit" className={classes.margin}
+                                  onClick={() => this.handleChangeEditable(editable.state)}>
+                                <EditIcon fontSize="small"/>
+                              </IconButton>
+                            </>
+                            :
+                            <>
+                              <TextField
+                                  key={editable.key}
+                                  id="standard-search"
+                                  name={editable.state}
+                                  value={editable.value || ''}
+                                  onChange={this.handleInputChange}
+                                  type="text"
+                                  className={classes.textField}
+                                  margin="normal"
+                              />
+                              <IconButton
+                                  key={editable.state} aria-label="Save" className={classes.margin}
+                                  onClick={() => this.handleChangeEditable('')}>
+                                <SaveIcon fontSize="small"/>
+                              </IconButton>
+                            </>
+                        }
+                      </div>
+                    </Grid>
+                )}
+              </Grid>
               <Grid xs={4} item>
                 <Button
                     variant="contained"
                     color="primary"
-                    size="large"
+                    size="medium"
                     className={classes.button}
                     startIcon={<SaveIcon/>}
                     onClick={this.handleSave}
                 >
                   Save
                 </Button>
-              </Grid>
-              <Grid xs={12} item>
-                <Button href={'/profile/bookings'}>Bookings</Button>
-                <Button href={'/profile/rents'}>Rents</Button>
               </Grid>
             </Grid>
           </Container>
